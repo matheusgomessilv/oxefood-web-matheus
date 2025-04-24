@@ -1,143 +1,160 @@
-import React, { useState } from 'react';
+import axios from "axios";
+import React, { useState } from "react";
+import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
+import MenuSistema from '../../MenuSistema';
 
-const FormProduto = () => {
-  const [form, setForm] = useState({
-    titulo: '',
-    codigo: '',
-    descricao: '',
-    valor: '',
-    tempoMin: '',
-    tempoMax: ''
-  });
+export default function FormProduto () {
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
+    const [titulo, setTitulo] = useState();
+    const [codigo, setcodigo] = useState();
+    const [descricao, setdescricao] = useState();
+    const [valorUnitario, setvalorUnitario] = useState();
+    const [tempoEntregaMinimo, settempoEntregaMinimo] = useState();
+    const [tempoEntregaMaximo, settempoEntregaMaximo] = useState(); 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Formulário enviado:', form);
-  };
+    function salvar() {
 
-  return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', fontFamily: 'Arial' }}>
-      <h3 style={{ marginTop: '40px', marginBottom: '30px', color: '#555' }}>
-        <span style={{ color: '#999' }}>Produto »</span> <strong>Cadastro</strong>
-      </h3>
+		let ProdutoRequest = {
+		     titulo: titulo,
+		     codigo: codigo,
+		     descricao: descricao,
+		     valorUnitario: valorUnitario,
+		     tempoEntregaMinimo: tempoEntregaMinimo,
+             tempoEntregaMaximo:tempoEntregaMaximo
+		}
+	
+		axios.post("http://localhost:8080/api/produto", ProdutoRequest)
+		.then((response) => {
+		     console.log('Produto cadastrado com sucesso.')
+		})
+		.catch((error) => {
+		     console.log('Erro ao incluir o um Produto.')
+		})
+	}
 
-      <form onSubmit={handleSubmit}>
-        {/* Linha 1 */}
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontWeight: 'bold' }}>Título *</label>
-            <input
-              type="text"
-              name="titulo"
-              value={form.titulo}
-              onChange={handleChange}
-              placeholder="Informe o título do produto"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-              required
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontWeight: 'bold' }}>Código do Produto *</label>
-            <input
-              type="text"
-              name="codigo"
-              value={form.codigo}
-              onChange={handleChange}
-              placeholder="Informe o código do produto"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-              required
-            />
-          </div>
+
+    return (
+
+        <div>
+        
+        <MenuSistema tela={'produto'} />
+
+            <div style={{marginTop: '3%'}}>
+
+                <Container textAlign='justified' >
+
+                    <h2> <span style={{color: 'darkgray'}}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+
+                    <Divider />
+
+                    <div style={{marginTop: '4%'}}>
+
+                        <Form>
+
+                            <Form.Group widths='equal'>
+
+                                <Form.Input
+                                    required
+                                    fluid
+                                    label='Titulo'
+                                    maxLength="100"
+                                    placeholder="Informe o titulo do produto"
+                                    value={titulo}
+			                        onChange={e => setTitulo(e.target.value)}
+                                
+                                />
+
+                                <Form.Input
+                                    required
+                                    fluid
+                                    placeholder="Informe o código do produto"
+                                    label='Código do Produto'
+                                    value={codigo}
+			                        onChange={e => setcodigo(e.target.value)}
+                                >
+                                </Form.Input>
+
+                            </Form.Group>
+                            <Form.TextArea
+                                    label='Descrição'
+                                    placeholder="Informe a descrição do produto"
+                                    maxLength="10000"
+                                    value={descricao}
+			                        onChange={e => setdescricao(e.target.value)}
+
+                               />
+                            <Form.Group>
+
+                                <Form.Input
+                                    required
+                                    fluid
+                                    label='Valor Unitário'
+                                    width={6}
+                                    value={valorUnitario}
+			                        onChange={e => setvalorUnitario(e.target.value)}
+                                >
+                                </Form.Input>
+
+                                <Form.Input
+                                    fluid
+                                    label='Tempo de Entrega Mínimo em Minutos'
+                                    placeholder="30"
+                                    width={6}
+                                    value={tempoEntregaMinimo}
+			                        onChange={e => settempoEntregaMinimo(e.target.value)}
+
+                                >
+                                </Form.Input>
+
+                                <Form.Input
+                                    fluid
+                                    label='Tempo de Entrega Máximo em Minutos'
+                                    placeholder="40"
+                                    width={6}
+                                    value={tempoEntregaMaximo}
+			                        onChange={e => settempoEntregaMaximo(e.target.value)}
+
+                                >
+                                </Form.Input>
+                            </Form.Group>
+                        
+                        </Form>
+                        
+                        <div style={{marginTop: '4%'}}>
+
+                            <Button
+                                type="button"
+                                inverted
+                                circular
+                                icon
+                                labelPosition='left'
+                                color='orange'
+                            >
+                                <Icon name='reply' />
+                                Listar
+                            </Button>
+                                
+                            <Button
+                                inverted
+                                circular
+                                icon
+                                labelPosition='left'
+                                color='blue'
+                                floated='right'
+                                onClick={() => salvar()}
+                            >
+                                <Icon name='save' />
+                                Salvar
+                            </Button>
+
+                        </div>
+
+                    </div>
+                    
+                </Container>
+            </div>
         </div>
 
-        {/* Linha 2 */}
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ fontWeight: 'bold' }}>Descrição</label>
-          <textarea
-            name="descricao"
-            value={form.descricao}
-            onChange={handleChange}
-            placeholder="Informe a descrição do produto"
-            style={{ width: '100%', padding: '8px', marginTop: '5px', height: '80px', resize: 'none' }}
-          />
-        </div>
+    );
 
-        {/* Linha 3 */}
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '25px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontWeight: 'bold' }}>Valor Unitário *</label>
-            <input
-              type="number"
-              name="valor"
-              value={form.valor}
-              onChange={handleChange}
-              placeholder="R$"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-              required
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontWeight: 'bold' }}>Tempo de Entrega Mínimo em Minutos</label>
-            <input
-              type="number"
-              name="tempoMin"
-              value={form.tempoMin}
-              onChange={handleChange}
-              placeholder="30"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontWeight: 'bold' }}>Tempo de Entrega Máximo em Minutos</label>
-            <input
-              type="number"
-              name="tempoMax"
-              value={form.tempoMax}
-              onChange={handleChange}
-              placeholder="60"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-            />
-          </div>
-        </div>
-
-        {/* Botões */}
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button
-            type="button"
-            onClick={() => window.location.href = '/produtos'}
-            style={{
-              backgroundColor: '#fff',
-              color: '#f58634',
-              border: '1px solid #f58634',
-              padding: '8px 20px',
-              borderRadius: '20px',
-              cursor: 'pointer'
-            }}
-          >
-            ⮌ Listar
-          </button>
-          <button
-            type="submit"
-            style={{
-              backgroundColor: '#fff',
-              color: '#00aaff',
-              border: '1px solid #00aaff',
-              padding: '8px 20px',
-              borderRadius: '20px',
-              cursor: 'pointer'
-            }}
-          >
-            💾 Salvar
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-export default FormProduto;
+}
