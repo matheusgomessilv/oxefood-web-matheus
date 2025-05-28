@@ -9,7 +9,11 @@ import Home from './views/home/Home';
 import FormProduto from './views/produto/FormProduto';
 import ListProduto from './views/produto/ListProduto';
 import FormLivro from './views/livro/FormLivro';
-import ListLivro from './views/livro/ListLivro';
+import ListLivro from './views/livro/ListLivro'; 
+import FormCupomDesconto from './views/cupomDesconto/FormCupomDesconto';
+import ListCupomDesconto from './views/cupomDesconto/ListCupomDesconto'; 
+import FormCategoriaProduto from './views/categoriaProduto/FormCategoriaProduto';
+import ListCategoriaProduto from './views/categoriaProduto/ListCategoriaProduto';
 
 function Rotas() {
     return (
@@ -23,7 +27,11 @@ function Rotas() {
                 <Route path="form-entregador" element={ <FormEntregador/> } /> 
                 <Route path="list-entregador" element={ <ListEntregador/> } /> 
                 <Route path="form-livro" element={ <FormLivro/> } /> 
-                <Route path="list-livro" element={ <ListLivro/> } />
+                <Route path="list-livro" element={ <ListLivro/> } /> 
+                <Route path="form-cupomDesconto" element={ <FormCupomDesconto/> } /> 
+                <Route path="list-cupomDesconto" element={ <ListCupomDesconto/> } /> 
+                 <Route path="form-categoriaProduto" element={ <FormCategoriaProduto/> } /> 
+                <Route path="list-categoriaProduto" element={ <ListCategoriaProduto/> } />
             </Routes>
         </>
     )
