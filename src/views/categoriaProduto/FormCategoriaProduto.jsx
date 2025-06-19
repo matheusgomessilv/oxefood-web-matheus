@@ -1,9 +1,9 @@
 import axios from "axios";
-import InputMask from 'comigo-tech-react-input-mask';
-import React , {useEffect, useState } from "react";
-import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react'; 
-import { Link,useLocation } from "react-router-dom";
-import MenuSistema from '../../MenuSistema'; 
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
+import MenuSistema from '../../MenuSistema';
+import { notifyError, notifySuccess } from '../../views/util/Util';
 
 
 
@@ -32,12 +32,26 @@ useEffect(() => {
 		}
         if (idCategoriaProduto != null) { //Alteração:
             axios.put("http://localhost:8080/api/categoriaProduto/" + idCategoriaProduto, categoriaProdutoRequest)
-            .then((response) => { console.log('Categoria de Produto alterado com sucesso.') })
-            .catch((error) => { console.log('Erro ao alterar uma Categoria de Produto.') })
+            .then((response) => { notifySuccess('Categoria de Produto alterado com sucesso.') })
+            .catch((error) => {if (error.response.data.errors != undefined) {
+       		for (let i = 0; i < error.response.data.errors.length; i++) {
+	       		notifyError(error.response.data.errors[i].defaultMessage)
+	    	}
+	} else {
+		notifyError(error.response.data.message)
+	}
+ })
         } else { //Cadastro:
             axios.post("http://localhost:8080/api/categoriaProduto", categoriaProdutoRequest)
-            .then((response) => { console.log('Categoria de Produto cadastrado com sucesso.') })
-            .catch((error) => { console.log('Erro ao incluir a Categoria do Produto.') })
+            .then((response) => {notifySuccess('Categoria de Produto cadastrado com sucesso.') })
+            .catch((error) => { if (error.response.data.errors != undefined) {
+       		for (let i = 0; i < error.response.data.errors.length; i++) {
+	       		notifyError(error.response.data.errors[i].defaultMessage)
+	    	}
+	} else {
+		notifyError(error.response.data.message)
+	}
+ })
         }
  
 	}

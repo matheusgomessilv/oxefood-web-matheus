@@ -79,7 +79,8 @@ return(
 
                       <Table.Header>
                           <Table.Row>
-                              <Table.HeaderCell>Titulo</Table.HeaderCell>
+                              <Table.HeaderCell>Titulo</Table.HeaderCell> 
+                              <Table.HeaderCell>Categoria</Table.HeaderCell>
                               <Table.HeaderCell>Codigo</Table.HeaderCell>
                               <Table.HeaderCell>Descrição</Table.HeaderCell>
                               <Table.HeaderCell>ValorUnitario</Table.HeaderCell>
@@ -94,7 +95,8 @@ return(
                           { lista.map(produto => (
 
                               <Table.Row key={produto.id}>
-                                <Table.Cell>{produto.titulo}</Table.Cell>
+                                <Table.Cell>{produto.titulo}</Table.Cell> 
+                                <Table.Cell>{produto.categoria.descricao}</Table.Cell>
                                   <Table.Cell>{produto.codigo}</Table.Cell>
                                   <Table.Cell>{produto.descricao}</Table.Cell>
                                   <Table.Cell>{produto.valorUnitario}</Table.Cell>

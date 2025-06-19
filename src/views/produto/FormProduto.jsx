@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
+import { notifyError, notifySuccess } from '../../views/util/Util';
+
 
 export default function FormProduto () {
 
@@ -28,12 +30,26 @@ useEffect(() => {
     const [descricao, setDescricao] = useState();
     const [valorUnitario, setValorUnitario] = useState();
     const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
-    const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState(); 
+    const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();  
+    const [listaCategoria, setListaCategoria] = useState([]);
+    const [idCategoria, setIdCategoria] = useState();
+
+    useEffect(() => {
+
+       axios.get("http://localhost:8080/api/categoriaproduto")
+       .then((response) => {
+           const dropDownCategorias = response.data.map(c => ({ text: c.descricao, value: c.id }));
+           setListaCategoria(dropDownCategorias);
+       })
+
+   }, [])
+
 
     function salvar() {
 
 		let produtoRequest = {
-		     titulo: titulo,
+		     titulo: titulo, 
+            idCategoria: idCategoria,
 		     codigo: codigo,
 		     descricao: descricao,
 		     valorUnitario: valorUnitario,
@@ -43,12 +59,26 @@ useEffect(() => {
 	
         if (idProduto != null) { //Alteração:
             axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
-            .then((response) => { console.log('Produto alterado com sucesso.') })
-            .catch((error) => { console.log('Erro ao alter um Produto.') })
+            .then((response) => { notifySuccess('Produto alterado com sucesso.') })
+            .catch((error) => { if (error.response.data.errors != undefined) {
+       		for (let i = 0; i < error.response.data.errors.length; i++) {
+	       		notifyError(error.response.data.errors[i].defaultMessage)
+	    	}
+	} else {
+		notifyError(error.response.data.message)
+	}
+ })
         } else { //Cadastro:
             axios.post("http://localhost:8080/api/produto", produtoRequest)
-            .then((response) => { console.log('Produto cadastrado com sucesso.') })
-            .catch((error) => { console.log('Erro ao incluir o produto.') })
+            .then((response) => { notifySuccess('Produto cadastrado com sucesso.') })
+            .catch((error) => { if (error.response.data.errors != undefined) {
+       		for (let i = 0; i < error.response.data.errors.length; i++) {
+	       		notifyError(error.response.data.errors[i].defaultMessage)
+	    	}
+	} else {
+		notifyError(error.response.data.message)
+	}
+ })
         }
  
 	}
@@ -101,7 +131,21 @@ useEffect(() => {
                                 >
                                 </Form.Input>
 
-                            </Form.Group>
+                            </Form.Group> 
+
+                                <Form.Select
+	                            required
+	                            fluid
+	                            tabIndex='3'
+                                placeholder='Selecione'
+                                label='Categoria'
+                                options={listaCategoria}
+                                value={idCategoria}
+                                onChange={(e,{value}) => {
+                                    setIdCategoria(value)
+                                }}
+                            /> 
+                            
                             <Form.TextArea
                                     label='Descrição'
                                     placeholder="Informe a descrição do produto"

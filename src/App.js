@@ -1,8 +1,8 @@
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { Segment } from 'semantic-ui-react';
 import './App.css';
-import FormCliente from './views/cliente/FormCliente';
-import FormProduto from './views/produto/FormProduto'; 
-import FormEntregador from './views/entregador/FormEntregador'; 
+
 import Rotas from './Rotas';
 
 
@@ -11,7 +11,7 @@ function App() {
   return (
 
     <div className="App">
-      
+       <ToastContainer />
       <Rotas/>
 
       <div style={{marginTop: '6%'}}>
