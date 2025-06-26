@@ -1,7 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
-
+import { logout } from './views/util/AuthenticationService';
 export default function MenuSistema (props) {
 
    return(
@@ -14,6 +13,13 @@ export default function MenuSistema (props) {
                    as={Link}
                    to='/'
                />
+                <Menu.Item
+                    className='navbar__item--mobile'
+                    onClick={logout}
+                    content='Sair'
+                    as={Link}
+                    to='/'
+                />
 
                <Menu.Item
                    content='Cliente'
